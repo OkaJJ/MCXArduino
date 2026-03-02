@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/matyascron/Arduino/hardware/tools/mcxdiscovery/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

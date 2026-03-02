@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/mcx-discovery.dir/link.d "CMakeFiles/mcx-discovery.dir/mcx-discovery.cpp.o" "CMakeFiles/mcx-discovery.dir/hidapi/linux/hid.c.o" -o x86_64-linux-gnu/mcx-discovery  -ludev

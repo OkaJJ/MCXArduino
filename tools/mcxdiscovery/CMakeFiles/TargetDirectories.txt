@@ -1,0 +1,3 @@
+/home/matyascron/Arduino/hardware/tools/mcxdiscovery/CMakeFiles/mcx-discovery.dir
+/home/matyascron/Arduino/hardware/tools/mcxdiscovery/CMakeFiles/edit_cache.dir
+/home/matyascron/Arduino/hardware/tools/mcxdiscovery/CMakeFiles/rebuild_cache.dir
