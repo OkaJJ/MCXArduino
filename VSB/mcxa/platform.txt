@@ -1,0 +1,55 @@
+name=MCXArduino Boards
+version=0.0.1
+
+# -------------------------------------------------------------------------------------
+# MCXDiscovery pluggable discovery program for device identification inside Arduino IDE 
+# -------------------------------------------------------------------------------------
+
+pluggable_discovery.mcxdiscovery.pattern="{runtime.platform.path}/tools/mcx-discovery/mcx-discovery"
+
+build.sdk.includes=-I{build.core.path}/arduino -I{build.core.path}/arduino/system -I{build.core.path}/arduino/system/CMSIS/Core/Include -I{build.core.path}/arduino/system/drivers -I{build.core.path}/arduino/system/periph1 -I{runtime.platform.path}/variants/MCXArduino
+
+compiler.c.cmd=arm-none-eabi-gcc
+compiler.c.flags=-mcpu=cortex-m33 -mthumb -ffunction-sections -DCPU_MCXA156VLL -fdata-sections -Os -g3
+
+compiler.c.elf.cmd=arm-none-eabi-g++
+compiler.c.elf.flags=-T{runtime.platform.path}/variants/MCXArduino/MCXA156_flash.ld -Wl,--gc-sections -mcpu=cortex-m33 -mthumb -specs=nosys.specs -Wl,--no-warn-rwx-segments
+
+compiler.cpp.cmd=arm-none-eabi-g++
+compiler.cpp.flags=-mcpu=cortex-m33 -mthumb -ffunction-sections -DCPU_MCXA156VLL -fdata-sections -Os -g3 -fno-exceptions -fno-rtti
+
+compiler.as.cmd=arm-none-eabi-gcc
+compiler.as.flags=-mcpu=cortex-m33 -mthumb -x assembler-with-cpp -DCPU_MCXA156VLL
+
+compiler.ar.cmd=arm-none-eabi-ar
+compiler.ar.flags=rcs
+
+compiler.objcopy.cmd=arm-none-eabi-objcopy
+
+compiler.size.cmd=arm-none-eabi-size
+
+tools.blhost.path={runtime.platform.path}/tools/upload
+tools.blhost.cmd=upload.sh
+
+tools.blhost.upload.params.verbose=
+tools.blhost.upload.params.quiet=
+
+tools.blhost.upload.pattern="{tools.blhost.path}/{tools.blhost.cmd}" "blhost" "{build.path}/{build.project_name}.bin"
+
+# RECIPES
+recipe.c.o.pattern="{compiler.c.cmd}" {compiler.c.flags} -c {includes} {build.sdk.includes} "{source_file}" -o "{object_file}"
+
+recipe.cpp.o.pattern="{compiler.cpp.cmd}" {compiler.cpp.flags} -c {includes} {build.sdk.includes} "{source_file}" -o "{object_file}"
+
+recipe.S.o.pattern="{compiler.as.cmd}" {compiler.as.flags} -c {includes} {build.sdk.includes} "{source_file}" -o "{object_file}"
+
+recipe.ar.pattern="{compiler.ar.cmd}" {compiler.ar.flags} "{archive_file_path}" "{object_file}"
+
+recipe.c.combine.pattern="{compiler.c.elf.cmd}" {compiler.c.elf.flags} -o "{build.path}/{build.project_name}.elf" {object_files} "{build.path}/{archive_file}"
+
+recipe.objcopy.bin.pattern="{compiler.objcopy.cmd}" -O binary "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+recipe.size.pattern="{compiler.size.cmd}" -A "{build.path}/{build.project_name}.elf"
+
+recipe.size.regex=^(?:\.text|\.data|\.bootloader)\s+([0-9]+).*
+recipe.size.regex.data=^(?:\.data|\.bss|\.noinit)\s+([0-9]+).*
